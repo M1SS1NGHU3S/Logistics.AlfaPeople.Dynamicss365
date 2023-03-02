@@ -1,9 +1,9 @@
-﻿using Logistics.AlfaPeople.Plugins.LogisticsISV;
+﻿using Logistics.AlfaPeople.Models;
+using Logistics.AlfaPeople.Plugins.LogisticsISV;
+using Logistiscs.AlfaPeople.Models.Controllers;
+using Microsoft.Xrm.Sdk;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Logistics.AlfaPeople.Plugins.Plugins
 {
@@ -12,6 +12,12 @@ namespace Logistics.AlfaPeople.Plugins.Plugins
 		public override void ExecutePlugin(IServiceProvider serviceProvider)
 		{
 			this.TracingService.Trace("Entrou no Plugin");
+
+			Entity product = (Entity)Context.InputParameters["Target"];
+			this.TracingService.Trace("Pegou o produto");
+
+			ProductController productController = new ProductController(Connector.GetService());
+			this.TracingService.Trace(productController.Create(product).ToString());
 		}
 	}
 }
