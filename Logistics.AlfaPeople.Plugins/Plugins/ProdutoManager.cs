@@ -12,20 +12,40 @@ namespace Logistics.AlfaPeople.Plugins.Plugins
 	{
 		public override void ExecutePlugin(IServiceProvider serviceProvider)
 		{
-			this.TracingService.Trace("Entrou no Plugin");
-
 			Entity product = (Entity)Context.InputParameters["Target"];
-			this.TracingService.Trace("Pegou o produto");
 
 			CrmServiceClient serviceClient = Singleton.GetService();
 			this.TracingService.Trace("Conexão feita com sucesso");
 
+			GetGrupoUnidadesName(product, out string grupoUnidadeName);
+			this.TracingService.Trace("Nome do grupo de unidades recuperado com sucesso");
+
+			GrupoDeUnidadesController grupoUnidadesControl = new GrupoDeUnidadesController(serviceClient);
+			this.TracingService.Trace("Grupo unidades control 2 criado");
+
+			Entity getGrupoByNameReturn = grupoUnidadesControl.GetGrupoByName(grupoUnidadeName);
+			this.TracingService.Trace("getGrupoByNameReturn");
+
+			if (getGrupoByNameReturn == null)
+			{
+				this.TracingService.Trace("Grupo de unidades ainda não criado");
+				Guid grupoCreateReturn = grupoUnidadesControl.Create(grupoUnidadeName);
+				this.TracingService.Trace(grupoCreateReturn.ToString());
+			} else
+			{
+				this.TracingService.Trace("Grupo de unidades já existente");
+			}
+
+		}
+
+		private void GetGrupoUnidadesName(Entity product, out string grupoUnidadeName)
+		{
 			GrupoDeUnidadesController grupoUnidadesControl = new GrupoDeUnidadesController(this.Service);
 
 			EntityReference grupoReference = (EntityReference)product["defaultuomscheduleid"];
 			Entity grupoUnidades = grupoUnidadesControl.GetGrupoById(grupoReference.Id);
 
-			this.TracingService.Trace(grupoUnidades["name"].ToString());
+			grupoUnidadeName = grupoUnidades["name"].ToString();
 		}
 	}
 }

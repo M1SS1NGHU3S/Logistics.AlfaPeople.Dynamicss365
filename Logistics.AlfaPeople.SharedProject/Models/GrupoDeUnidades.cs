@@ -18,6 +18,15 @@ namespace Logistiscs.AlfaPeople.Models.Models
 			ServiceClient = serviceClient;
 		}
 
+		public Guid Create(string grupoName)
+		{
+			Entity grupoUnidades = new Entity(this.LogicalName);
+			grupoUnidades["name"] = grupoName;
+
+			Guid grupoUnidadesId = ServiceClient.Create(grupoUnidades);
+			return grupoUnidadesId;
+		}
+
 		public Entity GetGrupoByName(string grupoName, string[] columns)
 		{
 			QueryExpression queryGrupo = new QueryExpression(this.LogicalName);

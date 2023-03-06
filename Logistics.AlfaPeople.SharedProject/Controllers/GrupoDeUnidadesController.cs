@@ -19,6 +19,11 @@ namespace Logistiscs.AlfaPeople.Models.Controllers
 			this.GrupoUnidades = new GrupoDeUnidades(this.ServiceClient);
 		}
 
+		public Guid Create(string grupoName)
+		{
+			return GrupoUnidades.Create(grupoName);
+		}
+
 		public Entity GetGrupoByName(string grupoName)
 		{
 			return GrupoUnidades.GetGrupoByName(grupoName, new string[] { "uomscheduleid" });
