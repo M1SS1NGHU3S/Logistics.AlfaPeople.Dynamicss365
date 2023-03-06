@@ -8,20 +8,20 @@ using System.Threading.Tasks;
 
 namespace Logistiscs.AlfaPeople.Models.Controllers
 {
-	public class ProductController
+	public class GrupoDeUnidadesController
 	{
 		public IOrganizationService ServiceClient { get; set; }
-		public Product Product { get; set; }
+		public GrupoDeUnidades GrupoUnidades { get; set; }
 
-		public ProductController(IOrganizationService serviceClient)
+		public GrupoDeUnidadesController(IOrganizationService serviceClient)
 		{
 			this.ServiceClient = serviceClient;
-			this.Product = new Product(serviceClient);
+			this.GrupoUnidades = new GrupoDeUnidades(this.ServiceClient);
 		}
 
-		public Guid Create(Entity product)
+		public Entity GetGrupoByName(string grupoName)
 		{
-			return Product.Create(product);
+			return GrupoUnidades.GetGrupoByName(grupoName, new string[] { "uomscheduleid" });
 		}
 	}
 }

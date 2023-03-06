@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 
 namespace Logistiscs.AlfaPeople.Models.Controllers
 {
-	public class ProductController
+	public class ProdutoController
 	{
 		public IOrganizationService ServiceClient { get; set; }
-		public Product Product { get; set; }
+		public Produto Product { get; set; }
 
-		public ProductController(IOrganizationService serviceClient)
+		public ProdutoController(IOrganizationService serviceClient)
 		{
 			this.ServiceClient = serviceClient;
-			this.Product = new Product(serviceClient);
+			this.Product = new Produto(serviceClient);
 		}
 
 		public Guid Create(Entity product)

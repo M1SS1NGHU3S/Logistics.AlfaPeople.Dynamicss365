@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Logistics.AlfaPeople.Models
 {
-    public class Connector
+    public class Singleton
     {
         public static CrmServiceClient GetService()
         {

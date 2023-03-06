@@ -116,9 +116,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Connector.cs" />
-    <Compile Include="Controllers\ProductController.cs" />
-    <Compile Include="Models\Product.cs" />
+    <Compile Include="Controllers\GrupoDeUnidadesController.cs" />
+    <Compile Include="Controllers\UnidadeController.cs" />
+    <Compile Include="Models\GrupoDeUnidades.cs" />
+    <Compile Include="Models\Unidade.cs" />
+    <Compile Include="Singleton.cs" />
+    <Compile Include="Controllers\ProdutoController.cs" />
+    <Compile Include="Models\Produto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

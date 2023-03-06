@@ -9,8 +9,12 @@
     <Import_RootNamespace>Logistics.AlfaPeople.SharedProject</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Connector.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controllers\ProductController.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Product.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controllers\GrupoDeUnidadesController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controllers\ProdutoController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controllers\UnidadeController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\GrupoDeUnidades.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Produto.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Unidade.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Singleton.cs" />
   </ItemGroup>
 </Project>

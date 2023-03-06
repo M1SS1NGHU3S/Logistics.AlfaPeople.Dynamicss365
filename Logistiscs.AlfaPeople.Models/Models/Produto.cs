@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace Logistiscs.AlfaPeople.Models.Models
 {
-	public class Product
+	public class Produto
 	{
 		public IOrganizationService ServiceClient { get; set; }
-		public string LogicalName { get; set; } = "product";
+		public string LogicalName { get; } = "product";
 
-		public Product(IOrganizationService serviceClient)
+		public Produto(IOrganizationService serviceClient)
 		{
 			this.ServiceClient = serviceClient;
 		}
