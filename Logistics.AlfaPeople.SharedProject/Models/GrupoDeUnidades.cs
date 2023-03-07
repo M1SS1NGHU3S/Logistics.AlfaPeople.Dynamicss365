@@ -18,10 +18,11 @@ namespace Logistiscs.AlfaPeople.Models.Models
 			ServiceClient = serviceClient;
 		}
 
-		public Guid Create(string grupoName)
+		public Guid Create(string grupoName, string unidadeBaseName)
 		{
 			Entity grupoUnidades = new Entity(this.LogicalName);
 			grupoUnidades["name"] = grupoName;
+			grupoUnidades["baseuomname"] = unidadeBaseName;
 
 			Guid grupoUnidadesId = ServiceClient.Create(grupoUnidades);
 			return grupoUnidadesId;

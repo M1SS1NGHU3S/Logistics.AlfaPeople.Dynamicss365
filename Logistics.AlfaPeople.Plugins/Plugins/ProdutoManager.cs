@@ -1,6 +1,7 @@
 ﻿using Logistics.AlfaPeople.Models;
 using Logistics.AlfaPeople.PluginsDyn1.LogisticsISV;
 using Logistiscs.AlfaPeople.Models.Controllers;
+using Microsoft.Rest;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
@@ -10,42 +11,47 @@ namespace Logistics.AlfaPeople.Plugins.Plugins
 {
 	public class ProdutoManager : PluginCore
 	{
+		public Entity Product { get; set; }
+		public CrmServiceClient ServiceClient { get; set; }
+
 		public override void ExecutePlugin(IServiceProvider serviceProvider)
 		{
-			Entity product = (Entity)Context.InputParameters["Target"];
+			this.Product = (Entity)Context.InputParameters["Target"];
+			this.ServiceClient = Singleton.GetService();
 
-			CrmServiceClient serviceClient = Singleton.GetService();
-			this.TracingService.Trace("Conexão feita com sucesso");
+			Guid grupoUnidadesId = CheckIfGroupExists();
+			this.TracingService.Trace(grupoUnidadesId.ToString());
+		}
 
-			GetGrupoUnidadesName(product, out string grupoUnidadeName);
-			this.TracingService.Trace("Nome do grupo de unidades recuperado com sucesso");
+		private Guid CheckIfGroupExists()
+		{
+			GetGrupoUnidadesName(out string grupoUnidadeName, out string unidadeBaseName);
 
-			GrupoDeUnidadesController grupoUnidadesControl = new GrupoDeUnidadesController(serviceClient);
-			this.TracingService.Trace("Grupo unidades control 2 criado");
-
-			Entity getGrupoByNameReturn = grupoUnidadesControl.GetGrupoByName(grupoUnidadeName);
-			this.TracingService.Trace("getGrupoByNameReturn");
+			GrupoDeUnidadesController grupoUnidadesControl = new GrupoDeUnidadesController(this.ServiceClient);
+			Entity getGrupoByNameReturn = grupoUnidadesControl.GetGrupoByName(grupoUnidadeName, new string[] { "uomscheduleid" });
 
 			if (getGrupoByNameReturn == null)
 			{
-				this.TracingService.Trace("Grupo de unidades ainda não criado");
-				Guid grupoCreateReturn = grupoUnidadesControl.Create(grupoUnidadeName);
-				this.TracingService.Trace(grupoCreateReturn.ToString());
-			} else
+				this.TracingService.Trace("Esse grupo de unidades ainda não existe. Criação iniciada.");
+				Guid grupoCreateReturn = grupoUnidadesControl.Create(grupoUnidadeName, unidadeBaseName);
+
+				return grupoCreateReturn;
+			}
+			else
 			{
 				this.TracingService.Trace("Grupo de unidades já existente");
+				return (Guid)getGrupoByNameReturn["uomscheduleid"];
 			}
-
 		}
 
-		private void GetGrupoUnidadesName(Entity product, out string grupoUnidadeName)
+		private void GetGrupoUnidadesName(out string grupoUnidadeName, out string unidadeBaseName)
 		{
 			GrupoDeUnidadesController grupoUnidadesControl = new GrupoDeUnidadesController(this.Service);
-
-			EntityReference grupoReference = (EntityReference)product["defaultuomscheduleid"];
-			Entity grupoUnidades = grupoUnidadesControl.GetGrupoById(grupoReference.Id);
+			EntityReference grupoReference = (EntityReference)this.Product["defaultuomscheduleid"];
+			Entity grupoUnidades = grupoUnidadesControl.GetGrupoById(grupoReference.Id, new string[] { "name", "baseuomname" });
 
 			grupoUnidadeName = grupoUnidades["name"].ToString();
+			unidadeBaseName = grupoUnidades["baseuomname"].ToString();
 		}
 	}
 }
