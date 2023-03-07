@@ -9,6 +9,7 @@
     <Import_RootNamespace>Logistics.AlfaPeople.SharedProject</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)BaseModels\ModelCore.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controllers\GrupoDeUnidadesController.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controllers\ProdutoController.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controllers\UnidadeController.cs" />

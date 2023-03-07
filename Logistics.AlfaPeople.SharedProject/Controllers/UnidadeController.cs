@@ -18,5 +18,20 @@ namespace Logistiscs.AlfaPeople.Models.Controllers
 			this.ServiceClient = serviceClient;
 			this.Unidade = new Unidade(this.ServiceClient);
 		}
+
+		public Guid Create(Entity unidade)
+		{
+			return this.Unidade.Create(unidade);
+		}
+
+		public Entity GetUnidadeById(Guid unidadeId, string[] columns)
+		{
+			return this.Unidade.GetUnidadeById(unidadeId, columns);
+		}
+
+		public Entity GetUnidadeByName(string unidadeName, string[] columns)
+		{
+			return this.Unidade.GetUnidadeByName(unidadeName, columns);
+		}
 	}
 }

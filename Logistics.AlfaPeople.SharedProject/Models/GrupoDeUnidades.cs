@@ -1,4 +1,5 @@
-﻿using Microsoft.Xrm.Sdk;
+﻿using Logistiscs.AlfaPeople.Models.BaseModels;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
@@ -8,23 +9,21 @@ using System.Threading.Tasks;
 
 namespace Logistiscs.AlfaPeople.Models.Models
 {
-	public class GrupoDeUnidades
+	public class GrupoDeUnidades : ModelCore
 	{
-		public IOrganizationService ServiceClient { get; set; }
-		public string LogicalName { get; } = "uomschedule";
-
 		public GrupoDeUnidades(IOrganizationService serviceClient)
 		{
-			ServiceClient = serviceClient;
+			this.ServiceClient = serviceClient;
+			this.LogicalName = "uomschedule";
 		}
 
-		public Guid Create(string grupoName, string unidadeBaseName)
+		public Guid Create(Entity grupoUnidades)
 		{
-			Entity grupoUnidades = new Entity(this.LogicalName);
-			grupoUnidades["name"] = grupoName;
-			grupoUnidades["baseuomname"] = unidadeBaseName;
+			Entity grupoUnidadesNew = new Entity(this.LogicalName);
+			grupoUnidadesNew["name"] = grupoUnidades["name"].ToString();
+			grupoUnidadesNew["baseuomname"] = grupoUnidades["baseuomname"].ToString();
 
-			Guid grupoUnidadesId = ServiceClient.Create(grupoUnidades);
+			Guid grupoUnidadesId = ServiceClient.Create(grupoUnidadesNew);
 			return grupoUnidadesId;
 		}
 
@@ -34,7 +33,7 @@ namespace Logistiscs.AlfaPeople.Models.Models
 			queryGrupo.ColumnSet.AddColumns(columns);
 			queryGrupo.Criteria.AddCondition("name", ConditionOperator.Equal, grupoName);
 
-			return RetrieveFirstGrupo(queryGrupo);
+			return RetrieveFirstRow(queryGrupo);
 		}
 
 		public Entity GetGrupoById(Guid grupoId, string[] columns)
@@ -43,15 +42,7 @@ namespace Logistiscs.AlfaPeople.Models.Models
 			queryGrupo.ColumnSet.AddColumns(columns);
 			queryGrupo.Criteria.AddCondition("uomscheduleid", ConditionOperator.Equal, grupoId);
 
-			return RetrieveFirstGrupo(queryGrupo);
-		}
-
-		public Entity RetrieveFirstGrupo(QueryExpression queryGrupo)
-		{
-			EntityCollection gruposDeUnidades = this.ServiceClient.RetrieveMultiple(queryGrupo);
-
-			if (gruposDeUnidades.Entities.Count > 0) { return gruposDeUnidades.Entities.FirstOrDefault(); }
-			else { return null; }
+			return RetrieveFirstRow(queryGrupo);
 		}
 	}
 }

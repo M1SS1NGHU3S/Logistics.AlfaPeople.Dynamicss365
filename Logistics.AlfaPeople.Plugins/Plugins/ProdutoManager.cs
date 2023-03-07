@@ -19,21 +19,58 @@ namespace Logistics.AlfaPeople.Plugins.Plugins
 			this.Product = (Entity)Context.InputParameters["Target"];
 			this.ServiceClient = Singleton.GetService();
 
-			Guid grupoUnidadesId = CheckIfGroupExists();
-			this.TracingService.Trace(grupoUnidadesId.ToString());
+			//Guid grupoUnidadesId = CheckIfGrupoExists();
+			//this.TracingService.Trace(grupoUnidadesId.ToString());
+
+			Guid unidadeId = CheckIfUnidadeExists();
+			this.TracingService.Trace(unidadeId.ToString());
 		}
 
-		private Guid CheckIfGroupExists()
+		private Guid CheckIfUnidadeExists()
 		{
-			GetGrupoUnidadesName(out string grupoUnidadeName, out string unidadeBaseName);
+			Entity unidadeInfo = GetUnidadeInfo();
+			string unidadeName = unidadeInfo["name"].ToString();
+
+			UnidadeController unidadeControl = new UnidadeController(this.ServiceClient);
+			Entity getUnidadeByNameReturn = unidadeControl.GetUnidadeByName(unidadeName, new string[] { "uomid" });
+
+			if (getUnidadeByNameReturn == null)
+			{
+				return Guid.Empty;
+			} 
+			else
+			{
+				this.TracingService.Trace("Unidade já existente");
+				return (Guid)getUnidadeByNameReturn["uomid"];
+			}
+		}
+
+		private Entity GetUnidadeInfo()
+		{
+			UnidadeController unidadeControl = new UnidadeController(this.Service);
+			EntityReference unidadeReference = (EntityReference)this.Product["defaultuomid"];
+			Entity unidade = unidadeControl.GetUnidadeById(unidadeReference.Id, new string[]
+			{
+				"uomscheduleid",
+				"name",
+				"quantity",
+				"baseuom"
+			});
+
+			return unidade;
+		}
+
+		private Guid CheckIfGrupoExists()
+		{
+			Entity grupoUnidadesInfo = GetGrupoUnidadesInfo();
 
 			GrupoDeUnidadesController grupoUnidadesControl = new GrupoDeUnidadesController(this.ServiceClient);
-			Entity getGrupoByNameReturn = grupoUnidadesControl.GetGrupoByName(grupoUnidadeName, new string[] { "uomscheduleid" });
+			Entity getGrupoByNameReturn = grupoUnidadesControl.GetGrupoByName(grupoUnidadesInfo["name"].ToString(), new string[] { "uomscheduleid" });
 
 			if (getGrupoByNameReturn == null)
 			{
 				this.TracingService.Trace("Esse grupo de unidades ainda não existe. Criação iniciada.");
-				Guid grupoCreateReturn = grupoUnidadesControl.Create(grupoUnidadeName, unidadeBaseName);
+				Guid grupoCreateReturn = grupoUnidadesControl.Create(grupoUnidadesInfo);
 
 				return grupoCreateReturn;
 			}
@@ -44,14 +81,13 @@ namespace Logistics.AlfaPeople.Plugins.Plugins
 			}
 		}
 
-		private void GetGrupoUnidadesName(out string grupoUnidadeName, out string unidadeBaseName)
+		private Entity GetGrupoUnidadesInfo()
 		{
 			GrupoDeUnidadesController grupoUnidadesControl = new GrupoDeUnidadesController(this.Service);
 			EntityReference grupoReference = (EntityReference)this.Product["defaultuomscheduleid"];
 			Entity grupoUnidades = grupoUnidadesControl.GetGrupoById(grupoReference.Id, new string[] { "name", "baseuomname" });
 
-			grupoUnidadeName = grupoUnidades["name"].ToString();
-			unidadeBaseName = grupoUnidades["baseuomname"].ToString();
+			return grupoUnidades;
 		}
 	}
 }
