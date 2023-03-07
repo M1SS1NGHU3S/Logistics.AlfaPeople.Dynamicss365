@@ -1,11 +1,11 @@
-﻿if (typeof (Logistic) == "undefined") { Logistic = {} }
-if (typeof (Logistic.Account) == "undefined") { Logistic.Account = {} }
+﻿if (typeof (Logistics) == "undefined") { Logistics = {} }
+if (typeof (Logistics.Account) == "undefined") { Logistics.Account = {} }
 
 
-Logistic.Account = {
+Logistics.Account = {
 
     OnChange: function (executionContext) {
-       
+
         var formContext = executionContext.getFormContext();
         var nameAccount = formContext.getAttribute("name").getValue();
 

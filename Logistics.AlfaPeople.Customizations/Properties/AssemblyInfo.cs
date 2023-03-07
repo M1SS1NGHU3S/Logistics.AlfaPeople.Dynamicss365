@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Logistic.AlfaPeople.Customizations")]
+[assembly: AssemblyTitle("Logistics.AlfaPeople.Customizations")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Logistic.AlfaPeople.Customizations")]
+[assembly: AssemblyProduct("Logistics.AlfaPeople.Customizations")]
 [assembly: AssemblyCopyright("Copyright ©  2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("fe929298-380d-44fa-a751-dbfa274f97fd")]
+[assembly: Guid("031ffde2-e651-4375-99df-8c5480980a77")]
 
 // Version information for an assembly consists of the following four values:
 //
