@@ -19,11 +19,24 @@ namespace Logistics.AlfaPeople.Plugins.Plugins
 			this.Product = (Entity)Context.InputParameters["Target"];
 			this.ServiceClient = Singleton.GetService();
 
-			//Guid grupoUnidadesId = CheckIfGrupoExists();
-			//this.TracingService.Trace(grupoUnidadesId.ToString());
+			Guid grupoUnidadesId = CheckIfGrupoExists();
+			this.TracingService.Trace(grupoUnidadesId.ToString());
 
 			Guid unidadeId = CheckIfUnidadeExists();
 			this.TracingService.Trace(unidadeId.ToString());
+
+			Entity produtoToCreate = new Entity("product");
+
+			produtoToCreate["name"] = this.Product["name"];
+			produtoToCreate["productnumber"] = this.Product["productnumber"];
+			produtoToCreate["defaultuomscheduleid"] = new EntityReference("uomschedule", grupoUnidadesId);
+			produtoToCreate["defaultuomid"] = new EntityReference("uom", unidadeId);
+			produtoToCreate["quantitydecimal"] = this.Product["quantitydecimal"];
+			produtoToCreate["dyn2_isintegration"] = true;
+
+			ProdutoController produtoControl = new ProdutoController(this.ServiceClient);
+			produtoControl.Create(produtoToCreate);
+			this.TracingService.Trace("Produto criado com sucesso!");
 		}
 
 		private Guid CheckIfUnidadeExists()
