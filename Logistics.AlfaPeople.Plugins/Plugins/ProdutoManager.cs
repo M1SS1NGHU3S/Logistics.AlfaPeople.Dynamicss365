@@ -1,5 +1,5 @@
 ﻿using Logistics.AlfaPeople.Models;
-using Logistics.AlfaPeople.Plugins.LogisticsISV;
+using Logistics.AlfaPeople.PluginsDyn1.LogisticsISV;
 using Logistiscs.AlfaPeople.Models.Controllers;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Tooling.Connector;

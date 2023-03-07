@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Logistics.AlfaPeople.Plugins.LogisticsISV
+namespace Logistics.AlfaPeople.PluginsDyn1.LogisticsISV
 {
 	public abstract class PluginCore : IPlugin
 	{

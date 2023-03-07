@@ -12,6 +12,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Controllers\GrupoDeUnidadesController.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controllers\ProdutoController.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controllers\UnidadeController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LogisticsISV\PluginCore.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\GrupoDeUnidades.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Produto.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Unidade.cs" />
