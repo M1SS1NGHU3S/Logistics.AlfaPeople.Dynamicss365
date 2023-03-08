@@ -12,16 +12,19 @@ namespace Logistics.AlfaPeople.PluginsDyn1.LogisticsISV
         public IWorkflowContext WorkflowContext { get; set; }
         public IOrganizationServiceFactory ServiceFactory { get; set; }
         public IOrganizationService Service { get; set; }
+		public CodeActivityContext Context { get; set; }
 
 		protected override void Execute(CodeActivityContext context)
 		{
+			this.Context = context;
+
 			this.WorkflowContext = context.GetExtension<IWorkflowContext>();
 			this.ServiceFactory = context.GetExtension<IOrganizationServiceFactory>();
 			this.Service = this.ServiceFactory.CreateOrganizationService(this.WorkflowContext.UserId);
 
-			ExecuteAction(context);
+			ExecuteAction();
 		}
 
-		public abstract void ExecuteAction(CodeActivityContext context);
+		public abstract void ExecuteAction();
 	}
 }
