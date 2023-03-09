@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="JS\Logistics.AlfaPeople.Account.js" />
+    <Content Include="JS\Logistics.AlfaPeople.Contacts.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
