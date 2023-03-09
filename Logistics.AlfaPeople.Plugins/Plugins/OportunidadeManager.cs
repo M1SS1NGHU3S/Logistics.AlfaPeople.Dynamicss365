@@ -19,11 +19,24 @@ namespace Logistics.AlfaPeople.Plugins.Plugins
 		public override void ExecutePlugin(IServiceProvider serviceProvider)
 		{
 			this.Oportunidade = (Entity)this.Context.InputParameters["Target"];
+			this.Oportunidade.Attributes.Add("grp_idprincipal", FormatIdPrincipal());
+
 			this.ServiceClient = Singleton.GetService();
 			this.TracingService.Trace("Serviço recuperado com sucesso");
 
+			Entity oportunidadeToCreate = SetNewOportunidadeAttributes();
+			this.TracingService.Trace("Os atributos de oportunidadeToCreate foram preenchidos");
+
+			OportunidadeController oportunidadeControl = new OportunidadeController(this.ServiceClient);
+			oportunidadeControl.Create(oportunidadeToCreate);
+			this.TracingService.Trace("Oportunidade nova criada");
+		}
+
+		private Entity SetNewOportunidadeAttributes()
+		{
 			Entity oportunidadeToCreate = new Entity("opportunity");
 			oportunidadeToCreate["name"] = this.Oportunidade["name"];
+			oportunidadeToCreate["dyn2_idprincipal"] = this.Oportunidade["grp_idprincipal"];
 
 			if (this.Oportunidade.Attributes.TryGetValue("purchasetimeframe", out object value))
 			{
@@ -34,9 +47,13 @@ namespace Logistics.AlfaPeople.Plugins.Plugins
 				this.TracingService.Trace("purchasetimeframe não definido");
 			}
 
-			OportunidadeController oportunidadeControl = new OportunidadeController(this.ServiceClient);
-			oportunidadeControl.Create(oportunidadeToCreate);
-			this.TracingService.Trace("Oportunidade nova criada");
+			return oportunidadeToCreate;
+		}
+
+		public string FormatIdPrincipal()
+		{
+			string numIdentificador = this.Oportunidade["grp_nmr_identificador"].ToString();
+			return "OPP-" + numIdentificador + "-A1A2";
 		}
 	}
 }

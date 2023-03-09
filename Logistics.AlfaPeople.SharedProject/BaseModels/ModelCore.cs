@@ -20,5 +20,13 @@ namespace Logistiscs.AlfaPeople.Models.BaseModels
 			if (retrivedRow.Entities.Count > 0) { return retrivedRow.Entities.FirstOrDefault(); }
 			else { return null; }
 		}
+
+		public Entity RetrieveLastRow(QueryExpression query)
+		{
+			EntityCollection retrivedRow = this.ServiceClient.RetrieveMultiple(query);
+
+			if (retrivedRow.Entities.Count > 0) { return retrivedRow.Entities.LastOrDefault(); }
+			else { return null; }
+		}
 	}
 }
