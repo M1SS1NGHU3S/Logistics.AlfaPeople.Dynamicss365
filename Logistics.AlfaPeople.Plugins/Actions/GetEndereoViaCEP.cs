@@ -42,7 +42,7 @@ namespace Logistics.AlfaPeople.Plugins.Actions
 		public override void ExecuteAction()
 		{
 			RestResponse response = GetEnderecoOnAPI();
-			ContaVO contaVO = JsonConvert.DeserializeObject<ContaVO>(response.Content) ?? throw new Exception("Endereço não encontrado");
+			ContaVO contaVO = JsonConvert.DeserializeObject<List<ContaVO>>(response.Content).FirstOrDefault() ?? throw new Exception("Endereço não encontrado");
 
 			Logradouro.Set(this.Context, contaVO.Logradouro);
 			Complemento.Set(this.Context, contaVO.Complemento);
@@ -55,14 +55,15 @@ namespace Logistics.AlfaPeople.Plugins.Actions
 
 		private RestResponse GetEnderecoOnAPI()
 		{
-			RestClientOptions options = new RestClientOptions("https://viacep.com.br/ws")
+			var options = new RestClientOptions($"https://viacep.com.br/ws/{CEP.Get(this.Context)}/json/")
 			{
 				MaxTimeout = -1,
 			};
-			RestClient client = new RestClient(options);
+			var client = new RestClient(options);
 
-			RestRequest request = new RestRequest($"/{CEP.Get(this.Context)}/json/", Method.Get);
-			return client.Execute(request);
+			var request = new RestRequest("/account", Method.Post);
+			RestResponse response = client.Execute(request);
+			return response;
 		}
 	}
 }
