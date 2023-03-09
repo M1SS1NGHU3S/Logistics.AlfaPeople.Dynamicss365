@@ -26,15 +26,15 @@ namespace Logistiscs.AlfaPeople.Models.VO
 		public string Uf { get; set; }
 
 		[JsonProperty("ibge")]
-		public long Ibge { get; set; }
+		public string Ibge { get; set; }
 
 		[JsonProperty("gia")]
-		public long Gia { get; set; }
+		public string Gia { get; set; }
 
 		[JsonProperty("ddd")]
-		public long Ddd { get; set; }
+		public string Ddd { get; set; }
 
 		[JsonProperty("siafi")]
-		public long Siafi { get; set; }
+		public string Siafi { get; set; }
 	}
 }

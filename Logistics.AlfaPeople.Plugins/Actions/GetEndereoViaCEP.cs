@@ -42,15 +42,16 @@ namespace Logistics.AlfaPeople.Plugins.Actions
 		public override void ExecuteAction()
 		{
 			RestResponse response = GetEnderecoOnAPI();
-			ContaVO contaVO = JsonConvert.DeserializeObject<List<ContaVO>>(response.Content).FirstOrDefault() ?? throw new Exception("Endereço não encontrado");
+			Logradouro.Set(this.Context, response.Content);
+			//ContaVO contaVO = JsonConvert.DeserializeObject<ContaVO>(response.Content) ?? throw new Exception("Endereço não encontrado");
 
-			Logradouro.Set(this.Context, contaVO.Logradouro);
-			Complemento.Set(this.Context, contaVO.Complemento);
-			Bairro.Set(this.Context, contaVO.Bairro);
-			Localidade.Set(this.Context, contaVO.Localidade);
-			UF.Set(this.Context, contaVO.Uf);
-			IBGE.Set(this.Context, contaVO.Ibge);
-			DDD.Set(this.Context, contaVO.Ddd);
+			//Logradouro.Set(this.Context, contaVO.Logradouro);
+			//Complemento.Set(this.Context, contaVO.Complemento);
+			//Bairro.Set(this.Context, contaVO.Bairro);
+			//Localidade.Set(this.Context, contaVO.Localidade);
+			//UF.Set(this.Context, contaVO.Uf);
+			//IBGE.Set(this.Context, contaVO.Ibge);
+			//DDD.Set(this.Context, contaVO.Ddd);
 		}
 
 		private RestResponse GetEnderecoOnAPI()
