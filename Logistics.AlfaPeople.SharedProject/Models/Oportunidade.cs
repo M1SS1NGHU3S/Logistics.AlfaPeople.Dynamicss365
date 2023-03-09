@@ -13,5 +13,11 @@ namespace Logistiscs.AlfaPeople.Models.Models
 			this.ServiceClient = serviceClient;
 			this.LogicalName = "opportunity";
 		}
+
+		public Guid Create(Entity oportunidade)
+		{
+			Guid oportunidadeId = this.ServiceClient.Create(oportunidade);
+			return oportunidadeId;
+		}
 	}
 }
