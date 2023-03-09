@@ -44,8 +44,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="JS\Logistics.AlfaPeople.Account.js" />
-    <Content Include="JS\Logistics.AlfaPeople.Contacts.js" />
+    <Content Include="Dynamics1JS\Logistics.AlfaPeople.Account.js" />
+    <Content Include="Dynamics1JS\Logistics.AlfaPeople.Contacts.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Dynamics2JS\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

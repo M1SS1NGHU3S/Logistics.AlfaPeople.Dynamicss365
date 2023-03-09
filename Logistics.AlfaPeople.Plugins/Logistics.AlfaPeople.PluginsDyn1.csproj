@@ -144,6 +144,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\GetEndereoViaCEP.cs" />
+    <Compile Include="Plugins\OportunidadeManager.cs" />
     <Compile Include="Plugins\ProdutoManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
