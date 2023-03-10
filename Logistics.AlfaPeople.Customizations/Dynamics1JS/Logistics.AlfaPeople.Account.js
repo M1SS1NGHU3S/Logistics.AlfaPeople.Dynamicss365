@@ -77,27 +77,6 @@ Logistics.Account = {
                 var formattedCNPJ = cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
                 formContext.getAttribute("grp_cnpj").setValue(formattedCNPJ);
 
-                //var id = Xrm.Page.data.entity.getId();
-                //var queryAccountId = "";
-
-                //if (id.length > 0) {
-                //    queryAccountId += " and accountid ne " + id;
-                //}
-
-                //Xrm.WebApi.online.retrieveMultipleRecords("account", "?$select=name&$filter=grp_cnpj eq '" + formattedCNPJ + "'" + queryAccountId).then(
-                //    function success(results) {
-                //        if (results.entities.length == 0) {
-                //            formContext.getAttribute("grp_cnpj").setValue(formattedCNPJ);
-                //        } else {
-                //            formContext.getAttribute("grp_cnpj").setValue(null);
-                //            Logistics.Account.DynamicsAlert("CNPJ existe no sistema", "CNPJ duplicado")
-                //        }
-                //    },
-                //    function (error) {
-                //        formContext.getAttribute("grp_cnpj").setValue(null);
-                //        Logistics.Account.DynamicsAlert("Erro no sistema");
-                //    }
-                //);
             }
             else {
                 formContext.getAttribute("grp_cnpj").setValue(null);
