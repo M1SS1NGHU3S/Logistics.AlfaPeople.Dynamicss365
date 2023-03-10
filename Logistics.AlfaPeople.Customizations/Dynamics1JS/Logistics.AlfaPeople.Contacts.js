@@ -1,7 +1,7 @@
 ﻿if (typeof (Logistics) == "undefined") { Logistics = {} }
 if (typeof (Logistics.Contacts) == "undefined") { Logistics.Contacts = {} }
 
-AlfaPeople.Contacts = {
+Logistics.Contacts = {
 
     OnChange: function (executionContext) {
         var formContext = executionContext.getFormContext();
@@ -12,8 +12,8 @@ AlfaPeople.Contacts = {
             var cpfFormatted = cpf.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
             formContext.getAttribute("grp_cpf").setValue(cpfFormatted);
         } else {
-
-            Logistics.Contacts.DynamicsAlert("Infome um CPF válido!");
+            Logistics.Contacts.DynamicsAlert("CPF Inválido", "Digite um CPF válido!");
+            formContext.getAttribute("grp_cpf").setValue(null);
         }
     },
     DynamicsAlert: function (alertText, alertTitle) {

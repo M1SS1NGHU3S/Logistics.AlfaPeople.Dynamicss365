@@ -24,28 +24,36 @@ namespace Logistics.AlfaPeople.Plugins.Plugins
 			this.ServiceClient = Singleton.GetService();
 			this.TracingService.Trace("Serviço recuperado com sucesso");
 
-			Entity oportunidadeToCreate = SetNewOportunidadeAttributes();
-			this.TracingService.Trace("Os atributos de oportunidadeToCreate foram preenchidos");
-
 			OportunidadeController oportunidadeControl = new OportunidadeController(this.ServiceClient);
-			oportunidadeControl.Create(oportunidadeToCreate);
+			oportunidadeControl.Create(SetNewOportunidadeAttributes());
 			this.TracingService.Trace("Oportunidade nova criada");
 		}
 
 		private Entity SetNewOportunidadeAttributes()
 		{
 			Entity oportunidadeToCreate = new Entity("opportunity");
-			oportunidadeToCreate["name"] = this.Oportunidade["name"];
+
+			string[] oportunidadeAtributos = new string[]
+			{
+				"name",
+				"purchasetimeframe",
+				"description",
+				"budgetamount_base",
+				"purchaseprocess",
+				"currentsituation",
+				"customerneed",
+				"proposedsolution"
+			};
+			foreach (string att in oportunidadeAtributos)
+			{
+				if (this.Oportunidade.Attributes.TryGetValue(att, out object value))
+				{
+					oportunidadeToCreate[att] = value;
+				}
+			}
+
 			oportunidadeToCreate["dyn2_idprincipal"] = this.Oportunidade["grp_idprincipal"];
 
-			if (this.Oportunidade.Attributes.TryGetValue("purchasetimeframe", out object value))
-			{
-				oportunidadeToCreate["purchasetimeframe"] = value;
-			}
-			else
-			{
-				this.TracingService.Trace("purchasetimeframe não definido");
-			}
 
 			return oportunidadeToCreate;
 		}

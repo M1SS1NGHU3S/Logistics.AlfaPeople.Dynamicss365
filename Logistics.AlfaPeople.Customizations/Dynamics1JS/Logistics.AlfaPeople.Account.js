@@ -78,33 +78,37 @@ Logistics.Account = {
         if (cnpj != null) {
             if (cnpj.length == 14) {
                 var formattedCNPJ = cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
-                var id = Xrm.Page.data.entity.getId();
-                var queryAccountId = "";
+                formContext.getAttribute("grp_cnpj").setValue(formattedCNPJ);
 
-                if (id.length > 0) {
-                    queryAccountId += " and accountid ne " + id;
-                }
+                //var id = Xrm.Page.data.entity.getId();
+                //var queryAccountId = "";
 
-                Xrm.WebApi.online.retrieveMultipleRecords("account", "?$select=name&$filter=grp_cnpj eq '" + formattedCNPJ + "'" + queryAccountId).then(
-                    function success(results) {
-                        if (results.entities.length == 0) {
-                            formContext.getAttribute("grp_cnpj").setValue(formattedCNPJ);
-                        } else {
-                            formContext.getAttribute("grp_cnpj").setValue("");
-                            Logistics.Account.DynamicsAlert("CNPJ existe no sistema", "CNPJ duplicado")
-                        }
-                    },
-                    function (error) {
-                        Logistics.Account.DynamicsAlert("Erro no sistema")
-                    }
-                );
+                //if (id.length > 0) {
+                //    queryAccountId += " and accountid ne " + id;
+                //}
+
+                //Xrm.WebApi.online.retrieveMultipleRecords("account", "?$select=name&$filter=grp_cnpj eq '" + formattedCNPJ + "'" + queryAccountId).then(
+                //    function success(results) {
+                //        if (results.entities.length == 0) {
+                //            formContext.getAttribute("grp_cnpj").setValue(formattedCNPJ);
+                //        } else {
+                //            formContext.getAttribute("grp_cnpj").setValue(null);
+                //            Logistics.Account.DynamicsAlert("CNPJ existe no sistema", "CNPJ duplicado")
+                //        }
+                //    },
+                //    function (error) {
+                //        formContext.getAttribute("grp_cnpj").setValue(null);
+                //        Logistics.Account.DynamicsAlert("Erro no sistema");
+                //    }
+                //);
             }
             else {
-                Logistics.Account.DynamicsAlert("CNPJ digitado não é valido", "CNPJ inválido")
+                formContext.getAttribute("grp_cnpj").setValue(null);
+                Logistics.Account.DynamicsAlert("CNPJ digitado não é valido", "CNPJ inválido");
             }
         }
         else {
-            Logistics.Account.DynamicsAlert("Digite um valor para o CNPJ", "CNPJ incorreto")
+            Logistics.Account.DynamicsAlert("Digite um valor para o CNPJ", "CNPJ incorreto");
         }
     },
     DynamicsAlert: function (alertText, alertTitle) {

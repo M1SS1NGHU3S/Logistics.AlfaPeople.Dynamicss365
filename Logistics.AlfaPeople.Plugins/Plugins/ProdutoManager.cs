@@ -17,7 +17,12 @@ namespace Logistics.AlfaPeople.Plugins.Plugins
 		public override void ExecutePlugin(IServiceProvider serviceProvider)
 		{
 			this.Product = (Entity)Context.InputParameters["Target"];
+
+			this.TracingService.Trace((this.Product["defaultuomscheduleid"].GetType() == typeof(EntityReference)).ToString());
+			EntityReference teste = (EntityReference)this.Product["defaultuomscheduleid"];
+			this.TracingService.Trace(teste.LogicalName);
 			this.ServiceClient = Singleton.GetService();
+			this.TracingService.Trace("Serviço recuperado com sucesso");
 
 			Guid grupoUnidadesId = CheckIfGrupoExists();
 			this.TracingService.Trace(grupoUnidadesId.ToString());
@@ -25,18 +30,37 @@ namespace Logistics.AlfaPeople.Plugins.Plugins
 			Guid unidadeId = CheckIfUnidadeExists();
 			this.TracingService.Trace(unidadeId.ToString());
 
+			ProdutoController produtoControl = new ProdutoController(this.ServiceClient);
+			produtoControl.Create(SetNewProdutoVariables(grupoUnidadesId, unidadeId));
+			this.TracingService.Trace("Produto criado com sucesso!");
+		}
+
+		private Entity SetNewProdutoVariables(Guid grupoUnidadesId, Guid unidadeId)
+		{
 			Entity produtoToCreate = new Entity("product");
 
-			produtoToCreate["name"] = this.Product["name"];
-			produtoToCreate["productnumber"] = this.Product["productnumber"];
+			string[] produtoAtributos = new string[]
+			{
+				"name",
+				"productnumber",
+				"quantitydecimal",
+				"validfromdate",
+				"validtodate",
+				"description"
+			};
+			foreach (string att in produtoAtributos)
+			{
+				if (this.Product.Attributes.TryGetValue(att, out object value)) 
+				{ 
+					produtoToCreate[att] = value; 
+				}
+			}
+
 			produtoToCreate["defaultuomscheduleid"] = new EntityReference("uomschedule", grupoUnidadesId);
 			produtoToCreate["defaultuomid"] = new EntityReference("uom", unidadeId);
-			produtoToCreate["quantitydecimal"] = this.Product["quantitydecimal"];
 			produtoToCreate["dyn2_isintegration"] = true;
 
-			ProdutoController produtoControl = new ProdutoController(this.ServiceClient);
-			produtoControl.Create(produtoToCreate);
-			this.TracingService.Trace("Produto criado com sucesso!");
+			return produtoToCreate;
 		}
 
 		private Guid CheckIfUnidadeExists()
