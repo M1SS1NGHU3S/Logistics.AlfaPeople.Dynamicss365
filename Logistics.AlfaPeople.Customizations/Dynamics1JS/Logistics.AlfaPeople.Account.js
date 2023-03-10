@@ -38,11 +38,9 @@ Logistics.Account = {
 
 			Xrm.WebApi.execute(execute_grp_GetEnderecoViaCEP_Request).then(
 				function success(response) {
-					debugger;
 					if (response.ok) { return response.json(); }
 				}
 			).then(function (responseBody) {
-				debugger;
 				var result = responseBody;
 				console.log(result);
 				// Return Type: mscrm.grp_GetEndereoViaCEPResponse
@@ -63,7 +61,6 @@ Logistics.Account = {
 				formContext.getAttribute("grp_ibge").setValue(ibge);
 				formContext.getAttribute("grp_ddd").setValue(ddd);
 			}).catch(function (error) {
-				debugger;
 				console.log(error.message);
 			});
 		} else {
