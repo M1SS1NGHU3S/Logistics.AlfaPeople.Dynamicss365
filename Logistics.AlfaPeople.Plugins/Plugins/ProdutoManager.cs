@@ -18,9 +18,6 @@ namespace Logistics.AlfaPeople.Plugins.Plugins
 		{
 			this.Product = (Entity)Context.InputParameters["Target"];
 
-			this.TracingService.Trace((this.Product["defaultuomscheduleid"].GetType() == typeof(EntityReference)).ToString());
-			EntityReference teste = (EntityReference)this.Product["defaultuomscheduleid"];
-			this.TracingService.Trace(teste.LogicalName);
 			this.ServiceClient = Singleton.GetService();
 			this.TracingService.Trace("Serviço recuperado com sucesso");
 

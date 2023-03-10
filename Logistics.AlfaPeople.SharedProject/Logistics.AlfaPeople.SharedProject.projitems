@@ -10,12 +10,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)BaseModels\ModelCore.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controllers\ContaController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controllers\ContatoController.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controllers\GrupoDeUnidadesController.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controllers\OportunidadeController.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controllers\ProdutoController.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controllers\UnidadeController.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LogisticsISV\ActionCore.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LogisticsISV\PluginCore.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Conta.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Contato.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\GrupoDeUnidades.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Oportunidade.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Produto.cs" />
