@@ -17,56 +17,108 @@ Logistics.Account = {
     },
     OnCepChange: function (executionContext) {
         var formContext = executionContext.getFormContext();
-        var id = Xrm.Page.data.entity.getId();
 
         var contaCep = formContext.getAttribute("address1_postalcode").getValue();
 
-		var execute_grp_GetEndereoViaCEP_Request = {
-			// Parameters
-			entity: { entityType: "account", id: id }, // entity
-			CEP: contaCep, // Edm.String
+		if (contaCep.length == 8 && /\d{8}/.test(contaCep)) {
+			var execute_grp_GetEnderecoViaCEP_Request = {
+				// Parameters
+				CEP: contaCep, // Edm.String
 
-			getMetadata: function () {
-				return {
-					boundParameter: "entity",
-					parameterTypes: {
-						entity: { typeName: "mscrm.account", structuralProperty: 5 },
-						CEP: { typeName: "Edm.String", structuralProperty: 1 }
-					},
-					operationType: 0, operationName: "grp_GetEndereoViaCEP"
-				};
-			}
-		};
+				getMetadata: function () {
+					return {
+						boundParameter: null,
+						parameterTypes: {
+							CEP: { typeName: "Edm.String", structuralProperty: 1 }
+						},
+						operationType: 0, operationName: "grp_GetEnderecoViaCEP"
+					};
+				}
+			};
 
-		Xrm.WebApi.execute(execute_grp_GetEndereoViaCEP_Request).then(
-			function success(response) {
+			Xrm.WebApi.execute(execute_grp_GetEnderecoViaCEP_Request).then(
+				function success(response) {
+					debugger;
+					if (response.ok) { return response.json(); }
+				}
+			).then(function (responseBody) {
 				debugger;
-				if (response.ok) { return response.json(); }
-			}
-		).then(function (responseBody) {
-			debugger;
-			var result = responseBody;
-			console.log(result);
-			// Return Type: mscrm.grp_GetEndereoViaCEPResponse
-			// Output Parameters
-			var logradouro = result["Logradouro"]; // Edm.String
-			var complemento = result["Complemento"]; // Edm.String
-			var bairro = result["Bairro"]; // Edm.String
-			var localidade = result["Localidade"]; // Edm.String
-			var uf = result["UF"]; // Edm.String
-			var ibge = result["IBGE"]; // Edm.String
-			var ddd = result["DDD"]; // Edm.String
+				var result = responseBody;
+				console.log(result);
+				// Return Type: mscrm.grp_GetEndereoViaCEPResponse
+				// Output Parameters
+				var logradouro = result["Logradouro"]; // Edm.String
+				var complemento = result["Complemento"]; // Edm.String
+				var bairro = result["Bairro"]; // Edm.String
+				var localidade = result["Localidade"]; // Edm.String
+				var uf = result["UF"]; // Edm.String
+				var ibge = result["IBGE"]; // Edm.String
+				var ddd = result["DDD"]; // Edm.String
 
-			formContext.getAttribute("grp_logradouro").setValue(logradouro);
-			formContext.getAttribute("grp_complemento").setValue(complemento);
-			formContext.getAttribute("grp_bairro").setValue(bairro);
-			formContext.getAttribute("grp_localidade").setValue(localidade);
-			formContext.getAttribute("grp_uf").setValue(uf);
-			formContext.getAttribute("grp_ibge").setValue(ibge);
-			formContext.getAttribute("grp_ddd").setValue(ddd);
-		}).catch(function (error) {
-			debugger;
-			console.log(error.message);
-		});
+				formContext.getAttribute("grp_logradouro").setValue(logradouro);
+				formContext.getAttribute("grp_complemento").setValue(complemento);
+				formContext.getAttribute("grp_bairro").setValue(bairro);
+				formContext.getAttribute("grp_localidade").setValue(localidade);
+				formContext.getAttribute("grp_uf").setValue(uf);
+				formContext.getAttribute("grp_ibge").setValue(ibge);
+				formContext.getAttribute("grp_ddd").setValue(ddd);
+			}).catch(function (error) {
+				debugger;
+				console.log(error.message);
+			});
+		} else {
+			Xrm.Navigation.openErrorDialog({ errorCode: 1234, message: "CEP inválido." });
+			formContext.getAttribute("address1_postalcode").setValue(null);
+		}
+	},
+    CNPJOnChange: function (executionContext) {
+        var formContext = executionContext.getFormContext();
+        var cnpj = formContext.getAttribute("grp_cnpj").getValue();
+
+        if (cnpj != null) {
+            if (cnpj.length == 14) {
+                var formattedCNPJ = cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+                var id = Xrm.Page.data.entity.getId();
+                var queryAccountId = "";
+
+                if (id.length > 0) {
+                    queryAccountId += " and accountid ne " + id;
+                }
+
+                Xrm.WebApi.online.retrieveMultipleRecords("account", "?$select=name&$filter=grp_cnpj eq '" + formattedCNPJ + "'" + queryAccountId).then(
+                    function success(results) {
+                        if (results.entities.length == 0) {
+                            formContext.getAttribute("grp_cnpj").setValue(formattedCNPJ);
+                        } else {
+                            formContext.getAttribute("grp_cnpj").setValue("");
+                            Logistics.Account.DynamicsAlert("CNPJ existe no sistema", "CNPJ duplicado")
+                        }
+                    },
+                    function (error) {
+                        Logistics.Account.DynamicsAlert("Erro no sistema")
+                    }
+                );
+            }
+            else {
+                Logistics.Account.DynamicsAlert("CNPJ digitado não é valido", "CNPJ inválido")
+            }
+        }
+        else {
+            Logistics.Account.DynamicsAlert("Digite um valor para o CNPJ", "CNPJ incorreto")
+        }
+    },
+    DynamicsAlert: function (alertText, alertTitle) {
+        var alertStrings = {
+            confirmButtonLabel: "OK",
+            text: alertText,
+            title: alertTitle
+        };
+
+        var alertOptions = {
+            height: 120,
+            width: 200
+        };
+
+        Xrm.Navigation.openAlertDialog(alertStrings, alertOptions);
     }
 }

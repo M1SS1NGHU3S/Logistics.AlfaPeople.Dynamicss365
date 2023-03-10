@@ -41,28 +41,33 @@ namespace Logistics.AlfaPeople.Plugins.Actions
 
 		public override void ExecuteAction()
 		{
-			RestResponse response = GetEnderecoOnAPI();
-			Logradouro.Set(this.Context, response.Content);
-			//ContaVO contaVO = JsonConvert.DeserializeObject<ContaVO>(response.Content) ?? throw new Exception("Endereço não encontrado");
+			this.TracingService.Trace("Entrou na executeAction");
 
-			//Logradouro.Set(this.Context, contaVO.Logradouro);
-			//Complemento.Set(this.Context, contaVO.Complemento);
-			//Bairro.Set(this.Context, contaVO.Bairro);
-			//Localidade.Set(this.Context, contaVO.Localidade);
-			//UF.Set(this.Context, contaVO.Uf);
-			//IBGE.Set(this.Context, contaVO.Ibge);
-			//DDD.Set(this.Context, contaVO.Ddd);
+			RestResponse response = GetEnderecoOnAPI();
+			this.TracingService.Trace(response.Content);
+
+			ContaVO contaVO = JsonConvert.DeserializeObject<ContaVO>(response.Content) ?? throw new Exception("Endereço não encontrado");
+			this.TracingService.Trace(contaVO.Logradouro);
+
+			Logradouro.Set(this.Context, contaVO.Logradouro);
+			Complemento.Set(this.Context, contaVO.Complemento);
+			Bairro.Set(this.Context, contaVO.Bairro);
+			Localidade.Set(this.Context, contaVO.Localidade);
+			UF.Set(this.Context, contaVO.Uf);
+			IBGE.Set(this.Context, contaVO.Ibge);
+			DDD.Set(this.Context, contaVO.Ddd);
+			this.TracingService.Trace("Variaveis setadas");
 		}
 
 		private RestResponse GetEnderecoOnAPI()
 		{
-			var options = new RestClientOptions($"https://viacep.com.br/ws/{CEP.Get(this.Context)}/json/")
+			var options = new RestClientOptions($"https://viacep.com.br")
 			{
 				MaxTimeout = -1,
 			};
 			var client = new RestClient(options);
 
-			var request = new RestRequest("/account", Method.Post);
+			var request = new RestRequest($"/ws/{CEP.Get(this.Context)}/json/", Method.Get);
 			RestResponse response = client.Execute(request);
 			return response;
 		}
